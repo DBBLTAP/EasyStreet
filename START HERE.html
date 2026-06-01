@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DayZ Server Class - Start Here</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0a0a0a;
+  color: #e8e8e8;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+.skull {
+  font-size: 80px;
+  margin-bottom: 10px;
+  display: block;
+  text-align: center;
+  filter: drop-shadow(0 0 30px #c0392b);
+}
+h1 {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+h1 .red { color: #c0392b; }
+h1 .white { color: #e8e8e8; }
+.sub {
+  text-align: center;
+  color: #777;
+  font-size: 16px;
+  margin-bottom: 48px;
+}
+.sub em { color: #e67e22; font-style: normal; font-weight: 700; }
+
+/* MAIN CARDS */
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 960px;
+  margin-bottom: 40px;
+}
+.card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 28px 22px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: block;
+}
+.card:hover {
+  border-color: #c0392b;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(192,57,43,0.25);
+}
+.card .icon { font-size: 44px; display: block; margin-bottom: 12px; }
+.card .title { font-size: 18px; font-weight: 900; color: #e8e8e8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.card .desc { font-size: 13px; color: #777; line-height: 1.5; }
+.card .badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-red   { background: rgba(192,57,43,0.2);  color: #e74c3c; border: 1px solid rgba(192,57,43,0.5); }
+.badge-amber { background: rgba(230,126,34,0.15); color: #e67e22; border: 1px solid rgba(230,126,34,0.4); }
+.badge-green { background: rgba(39,174,96,0.15);  color: #2ecc71; border: 1px solid rgba(39,174,96,0.4); }
+.badge-blue  { background: rgba(41,128,185,0.15); color: #3498db; border: 1px solid rgba(41,128,185,0.4); }
+
+/* SCRIPTS SECTION */
+.section-title {
+  width: 100%;
+  max-width: 960px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #444;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #222;
+}
+.scripts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 960px;
+  margin-bottom: 40px;
+}
+.script-card {
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all 0.2s;
+}
+.script-card:hover { border-color: #333; background: #1a1a1a; }
+.script-icon { font-size: 24px; flex-shrink: 0; }
+.script-info .sname { font-size: 14px; font-weight: 700; color: #e8e8e8; margin-bottom: 3px; }
+.script-info .sdesc { font-size: 12px; color: #555; line-height: 1.4; }
+.script-info .spath { font-size: 11px; color: #e67e22; font-family: "Courier New", monospace; margin-top: 4px; word-break: break-all; }
+
+/* STEPS STRIP */
+.steps-strip {
+  width: 100%;
+  max-width: 960px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+.steps-strip h3 { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 16px; }
+.step-list { display: flex; gap: 0; flex-wrap: wrap; }
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #777;
+  position: relative;
+}
+.step-item:not(:last-child)::after {
+  content: "→";
+  color: #333;
+  margin-left: 8px;
+}
+.step-item .sn {
+  width: 22px; height: 22px;
+  background: #c0392b;
+  border-radius: 50%;
+  font-size: 11px; font-weight: 900; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-item .st { color: #aaa; font-size: 12px; }
+
+/* NOTICE BOX */
+.notice {
+  width: 100%;
+  max-width: 960px;
+  background: rgba(230,126,34,0.06);
+  border: 1px solid rgba(230,126,34,0.25);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  font-size: 14px;
+  color: #e67e22;
+  line-height: 1.6;
+}
+.notice .ni { font-size: 20px; flex-shrink: 0; }
+
+/* FOOTER */
+footer {
+  color: #333;
+  font-size: 12px;
+  text-align: center;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+@media(max-width: 700px) {
+  .main-grid { grid-template-columns: 1fr; }
+  h1 { font-size: 32px; }
+  .step-list { flex-direction: column; }
+  .step-item::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<span class="skull">&#9760;</span>
+<h1><span class="red">DAYZ SERVER</span><br><span class="white">CLASS</span></h1>
+<p class="sub">Everything you need to build, mod, and launch your DayZ community server. <em>Portable &mdash; runs from this drive on any PC.</em></p>
+
+<div class="section-title">&#128218; Guides &mdash; Open in your web browser</div>
+
+<div class="main-grid">
+  <a class="card" href="guides/dayz-server-guide.html">
+    <span class="icon">&#128218;</span>
+    <div class="title">Full Setup Guide</div>
+    <div class="desc">15 chapters, step-by-step. Covers everything from SteamCMD install to going live on the community browser.</div>
+    <span class="badge badge-red">START HERE</span>
+  </a>
+  <a class="card" href="guides/dayz-config-generator.html">
+    <span class="icon">&#9881;</span>
+    <div class="title">Config Generator</div>
+    <div class="desc">Fill in a form and instantly generate your serverDZ.cfg, start.bat, and BEServer_x64.cfg files ready to download.</div>
+    <span class="badge badge-amber">TOOL</span>
+  </a>
+  <a class="card" href="guides/dayz-quickref.html">
+    <span class="icon">&#128203;</span>
+    <div class="title">Quick Reference</div>
+    <div class="desc">All commands, ports, mod IDs, file paths, and troubleshooting fixes on one printable cheat sheet.</div>
+    <span class="badge badge-blue">PRINT ME</span>
+  </a>
+</div>
+
+<div class="section-title">&#9888; Before You Begin &mdash; Quick Start Order</div>
+
+<div class="steps-strip">
+  <h3>&#128073; Follow these steps in order on your server PC</h3>
+  <div class="step-list">
+    <div class="step-item"><div class="sn">1</div><div class="st">Run<br>install-server.bat</div></div>
+    <div class="step-item"><div class="sn">2</div><div class="st">Edit<br>serverDZ.cfg</div></div>
+    <div class="step-item"><div class="sn">3</div><div class="st">Run open-firewall<br>-ports.bat</div></div>
+    <div class="step-item"><div class="sn">4</div><div class="st">Forward ports<br>on router</div></div>
+    <div class="step-item"><div class="sn">5</div><div class="st">Run<br>start.bat</div></div>
+    <div class="step-item"><div class="sn">6</div><div class="st">Install mods with<br>install-mod.bat</div></div>
+    <div class="step-item"><div class="sn">7</div><div class="st">Sign up at<br>cftools.cloud</div></div>
+    <div class="step-item"><div class="sn">8</div><div class="st">You're<br>LIVE! &#127881;</div></div>
+  </div>
+</div>
+
+<div class="section-title">&#128296; Scripts &mdash; Run these directly from the scripts\ folder</div>
+
+<div class="scripts-grid">
+  <div class="script-card">
+    <div class="script-icon">&#9989;</div>
+    <div class="script-info">
+      <div class="sname">install-server.bat</div>
+      <div class="sdesc">First-time install. Downloads SteamCMD and all DayZ server files (~3 GB). Run as Admin.</div>
+      <div class="spath">scripts\install-server.bat</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#128640;</div>
+    <div class="script-info">
+      <div class="sname">start.bat</div>
+      <div class="sdesc">Launches your DayZ server. Edit the MODS line inside it to add your mods.</div>
+      <div class="spath">scripts\start.bat &rarr; copy to C:\DayZServer\</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#128260;</div>
+    <div class="script-info">
+      <div class="sname">restart.bat</div>
+      <div class="sdesc">Backs up player data, stops server, and restarts it. Schedule with Task Scheduler every 4 hours.</div>
+      <div class="spath">scripts\restart.bat &rarr; copy to C:\DayZServer\</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#129513;</div>
+    <div class="script-info">
+      <div class="sname">install-mod.bat</div>
+      <div class="sdesc">Interactive mod installer. Enter a Workshop ID and it downloads, copies, and sets up the mod for you.</div>
+      <div class="spath">scripts\install-mod.bat</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#128260;</div>
+    <div class="script-info">
+      <div class="sname">update-server.bat</div>
+      <div class="sdesc">Stops server, downloads the latest DayZ server patch, and restarts. Run after every DayZ update.</div>
+      <div class="spath">scripts\update-server.bat</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#128190;</div>
+    <div class="script-info">
+      <div class="sname">backup.ps1</div>
+      <div class="sdesc">PowerShell backup script. Saves player data to C:\DayZBackups\ and keeps the last 24 backups.</div>
+      <div class="spath">scripts\backup.ps1 &rarr; copy to C:\DayZServer\</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#128293;</div>
+    <div class="script-info">
+      <div class="sname">open-firewall-ports.bat</div>
+      <div class="sdesc">Opens all DayZ ports (2302-2306) in Windows Firewall. Run as Admin on every new PC.</div>
+      <div class="spath">scripts\open-firewall-ports.bat</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#128196;</div>
+    <div class="script-info">
+      <div class="sname">mod-list-template.txt</div>
+      <div class="sdesc">Blank template to plan your mod list. Includes all popular mod IDs and load order rules.</div>
+      <div class="spath">configs\mod-list-template.txt</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">&#128196; Config Files &mdash; Edit these then copy to C:\DayZServer\</div>
+
+<div class="scripts-grid">
+  <div class="script-card">
+    <div class="script-icon">&#9881;</div>
+    <div class="script-info">
+      <div class="sname">serverDZ.cfg</div>
+      <div class="sdesc">Your main server config. Change hostname, passwordAdmin, maxPlayers, and map before using.</div>
+      <div class="spath">configs\serverDZ.cfg &rarr; C:\DayZServer\serverDZ.cfg</div>
+    </div>
+  </div>
+  <div class="script-card">
+    <div class="script-icon">&#128737;</div>
+    <div class="script-info">
+      <div class="sname">BEServer_x64.cfg</div>
+      <div class="sdesc">BattlEye RCON config. Change the RConPassword then copy to the battleye\ folder after first server run.</div>
+      <div class="spath">configs\BEServer_x64.cfg &rarr; C:\DayZServer\battleye\</div>
+    </div>
+  </div>
+</div>
+
+<div class="notice">
+  <div class="ni">&#128161;</div>
+  <div>
+    <strong>New PC Setup?</strong> Start by running <strong>scripts\install-server.bat</strong> as Administrator &mdash; it installs SteamCMD, downloads the server files, creates all folders, and copies config files automatically. Then open the <strong>Full Setup Guide</strong> above and follow Chapter 1 onwards. The whole process takes about 2-3 hours start to finish.
+  </div>
+</div>
+
+<footer>DayZ Server Class &mdash; Portable Edition &mdash; Works on any Windows 10/11 PC &mdash; Just plug in this drive and open this file!</footer>
+
+</body>
+</html>
